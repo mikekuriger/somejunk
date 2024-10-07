@@ -1,0 +1,21 @@
+Deployment_name: st1lntmikey01-10-amirzoyan-2024-10-05T03:23:55
+Deployment_date: 2024-10-05T03:23:55
+Hostnames: st1lntmikey01, st1lntmikey02, st1lntmikey03, st1lntmikey04, st1lntmikey05, st1lntmikey06, st1lntmikey07, st1lntmikey08, st1lntmikey09, st1lntmikey10
+Ticket: TSM-00000
+App_Name: App 123
+Owner: amirzoyan
+Datacenter: st1
+Type: Testing
+Deployment_count: 10
+CPU: 2
+RAM: 2
+OS: SSVM-OEL8
+Disk: 60
+Cluster: B-2-1
+Network: VLAN540
+NFS: False
+Add_disk: False
+Centrify: True
+Centrify_zone: grp-vra
+Centrify_role: grp-vra-dev
+Patches: True

@@ -1,0 +1,23 @@
+Deployment_name: ev3lnpsomeapp01-4-amirzoyan-2024-10-05T01:27:09
+Deployment_date: 2024-10-05T01:27:09
+Hostnames: ev3lnpsomeapp01, ev3lnpsomeapp02, ev3lnpsomeapp03, ev3lnpsomeapp04
+Ticket: TSM-000000
+App_Name: some app
+Owner: amirzoyan
+Datacenter: ev3
+Type: Production
+Deployment_count: 4
+CPU: 2
+RAM: 2
+OS: <module 'os' from '/usr/lib64/python3.6/os.py'>
+Disk: 60
+Cluster: A-1-5
+Network: VLAN540
+NFS: True
+Add_disk: True
+Add_disk_size: 100
+Add_disk_path: /opt
+Centrify: True
+Centrify_zone: grp-sre
+Centrify_role: app-adportal
+Patches: True

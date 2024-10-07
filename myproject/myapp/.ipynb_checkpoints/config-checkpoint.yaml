@@ -1,0 +1,68 @@
+# config file SSVM build tool
+# 10-1-24 Mike Kuriger
+
+datacenters:
+    st1:
+        name: "DFW Data Center"
+        vcenter: "st1dceipmaster.corp.pvt"
+        credentials:
+            username: "mk7193"
+            password: "Mrkamk2021#"
+        vlans:
+            VLAN540: "ST1 - Weblogic"
+            VLAN673: "vlan673_vmware_management"
+            VLAN421: "vlan 421- linux_421"
+        clusters:
+            B-2-1:
+            B-2-2:
+            B-2-3:
+            B-2-4:
+            B-2-6:
+            B-2-7:
+            B-2-8:
+            B-2-9:
+        DNS:
+            10.6.1.111:
+            10.4.1.111:
+
+
+    ev3:
+        name: "Ashburn Datacenter"
+        vcenter: "ev3dceipmaster.corp.pvt"
+        credentials:
+            username: "mk7193"
+            password: "Mrkamk2021#"
+        vlans:
+            VLAN540: "EV3 - Weblogic"
+            VLAN673: "vlan673_vmware_management"
+            VLAN421: "vlan 421- linux_421"
+        clusters:
+            A-1-1:
+            A-1-2:
+            A-1-3:
+            A-1-4:
+            A-1-5:
+            A-1-6:
+            A-1-7:
+            A-1-8:
+        DNS:
+            10.4.1.111:
+            10.6.1.111:
+
+server_types:
+    lnp: 'Production'
+    lnd: 'Development'
+    lnt: 'Testing'
+
+os:
+    SSVM-OEL7: 'Oracle Enterprise Linux 7'
+    SSVM-OEL8: 'Oracle Enterprise Linux 8'
+    SSVM-OEL9: 'Oracle Enterprise Linux 9'
+    
+    
+centrify_zones:
+    grp-dba:
+    grp-sre:
+    grp-unix:
+    grp-vra:
+    app-ceph:

@@ -1,0 +1,78 @@
+# Create a virtual environment
+python3 -m venv myenv
+
+# Activate it (Linux/macOS)
+source myenv/bin/activate
+
+pip install django
+django-admin startproject myproject
+
+#This will create a myproject/ directory with the following structure:
+#myproject/
+#    manage.py
+#    myproject/
+#        __init__.py
+#        settings.py
+#        urls.py
+#        asgi.py
+#        wsgi.py
+#
+#    manage.py: A command-line utility for administrative tasks.
+#    settings.py: Configuration settings for your project.
+#    urls.py: URL routing for your project.
+
+# Run the Development Server
+cd myproject
+python manage.py runserver
+# Visit http://127.0.0.1:8000/ in your browser. You should see the Django welcome page.
+
+# Set Up a Django App
+python manage.py startapp myapp
+# This will create a directory myapp/ with the app files.
+
+# Add Your App to Settings
+# In myproject/settings.py, add your app to the INSTALLED_APPS list:
+vi myproject/settings.py 
+INSTALLED_APPS = [
+    'myapp',
+    # other apps...
+]
+
+# Create Models and Migrate
+# Define models in myapp/models.py. For example:
+vi myapp/models.py
+from django.db import models
+
+class Item(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+
+# After defining models, run the following commands to create database migrations and apply 
+python manage.py makemigrations
+python manage.py migrate
+
+# Create an Admin User
+python manage.py createsuperuser
+
+Username (leave blank to use 'mk7193'): 
+Email address: mk7193@thryv.com
+Password: 
+Password (again): 
+Superuser created successfully.
+
+# Run the Development Server Again
+python manage.py runserver
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+September 25, 2024 - 16:10:01
+Django version 5.1.1, using settings 'myproject.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+[25/Sep/2024 16:10:03] "GET / HTTP/1.1" 200 12068
+
+# Optional: Install Django Debug Toolbar
+pip install django-debug-toolbar
+

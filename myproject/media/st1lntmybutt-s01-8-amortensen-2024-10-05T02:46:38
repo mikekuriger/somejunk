@@ -1,0 +1,19 @@
+Deployment_name: st1lntmybutt-s01-8-amortensen-2024-10-05T02:46:38
+Deployment_date: 2024-10-05T02:46:38
+Hostnames: st1lntmybutt-s01, st1lntmybutt-s02, st1lntmybutt-s03, st1lntmybutt-s04, st1lntmybutt-s05, st1lntmybutt-s06, st1lntmybutt-s07, st1lntmybutt-s08
+Ticket: TSM-000000
+App_Name: My Butt :-)
+Owner: amortensen
+Datacenter: st1
+Type: Testing
+Deployment_count: 8
+CPU: 2
+RAM: 2
+OS: SSVM-OEL8
+Disk: 60
+Cluster: B-2-1
+Network: VLAN540
+NFS: False
+Add_disk: False
+Centrify: False
+Patches: False

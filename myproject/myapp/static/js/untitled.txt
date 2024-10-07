@@ -1,0 +1,114 @@
+
+// Pass the config file data as a JSON object to JavaScript
+const datacenterConfig = JSON.parse('{{ datacenter_config|safe|escapejs }}');
+
+// Cluster and Network options loaded dynamically
+document.addEventListener('DOMContentLoaded', function() {
+    const datacenterField = document.getElementById('datacenter');
+    const clusterField = document.getElementById('cluster');
+    const networkField = document.getElementById('network');
+
+    // The datacenterConfig object is now available from the template
+    console.log(datacenterConfig);
+
+    // Function to update the cluster options based on the selected datacenter
+    function updateClusterOptions(datacenter) {
+        // Clear the current options
+        clusterField.innerHTML = '';
+
+        // Get clusters from the config and add options dynamically
+        const clusters = datacenterConfig[datacenter].clusters;
+        for (const clusterKey in clusters) {
+            const option = document.createElement('option');
+            option.value = clusterKey;
+            option.textContent = clusterKey;
+            clusterField.appendChild(option);
+        }
+    }
+
+    // Function to update the network options based on the selected datacenter
+    function updateNetworkOptions(datacenter) {
+        // Clear the current options
+        networkField.innerHTML = '';
+
+        // Get networks (VLANs) from the config and add options dynamically
+        const networks = datacenterConfig[datacenter].vlans;
+        for (const vlanKey in networks) {
+            const option = document.createElement('option');
+            option.value = vlanKey;
+            option.textContent = networks[vlanKey];  // Use the description from the config
+            networkField.appendChild(option);
+        }
+    }
+
+    // Listen for changes to the datacenter field
+    datacenterField.addEventListener('change', function() {
+        const selectedDatacenter = datacenterField.value;
+        updateClusterOptions(selectedDatacenter);
+        updateNetworkOptions(selectedDatacenter);
+    });
+
+    // Trigger the update when the page loads to set the initial options
+    updateClusterOptions(datacenterField.value);
+    updateNetworkOptions(datacenterField.value);
+});
+
+
+
+// event listener to update some fields' default value, in case the user leaves them alone
+document.addEventListener('DOMContentLoaded', function() {
+    const fields = [
+        { fieldId: 'server_type', valueId: 'server_type_value' },
+        { fieldId: 'datacenter', valueId: 'datacenter_value' },
+        { fieldId: 'network', valueId: 'network_value' },
+        { fieldId: 'owner', valueId: 'owner_value' },       // Added owner
+        { fieldId: 'os', valueId: 'os_value' }              // Added os
+    ];
+
+
+
+            <strong>Ticket</strong>: {ticket}<br>
+            <strong>Application Name</strong>: {appname}<br>
+            <strong>Owner Value</strong>: {owner_value}<br>
+            <strong>Owner</strong>: {owner}<br>
+            <strong>Datacenter</strong>: {datacenter}<br>
+            <strong>Server Type</strong>: {server_type_value}<br>
+            <strong>Deployment Count</strong>: {deployment_count}<br>
+            <strong>CPU</strong>: {cpu}<br>
+            <strong>RAM</strong>: {ram}<br>
+            <strong>OS Value</strong>: {os_value}<br>
+            <strong>OS</strong>: {os}<br>
+            <strong>Disk Size</strong>: {disk_size}<br>
+            <strong>Cluster</strong>: {cluster}<br>
+            <strong>Network</strong>: {network}<br>
+            <strong>NFS Home</strong>: {nfs_home}<br>
+            <strong>Additional Disks</strong>: {add_disks}<br>
+            <strong>Additional Disk Size</strong>: {additional_disk_size}<br>
+            <strong>Mount Path</strong>: {mount_path}<br>
+            <strong>Join Centrify</strong>: {join_centrify}<br>
+            <strong>Centrify Zone</strong>: {centrify_zone}<br>
+            <strong>Centrify Role</strong>: {centrify_role}<br>
+            <strong>Install Patches</strong>: {install_patches}<br>
+            
+            
+            
+            ticket = form.cleaned_data.get('ticket', '')
+            app_name = form.cleaned_data.get('appname', '')
+            owner = form.cleaned_data.get('owner', '')
+            datacenter = form.cleaned_data.get('datacenter', '')
+            server_type = form.cleaned_data.get('server_type', '')
+            deployment_count = form.cleaned_data.get('deployment_count', '')
+            cpu = form.cleaned_data.get('cpu', '')
+            ram = form.cleaned_data.get('ram', '')
+            os = form.cleaned_data.get('os', '')
+            disk_size = form.cleaned_data.get('disk_size', '')
+            cluster = form.cleaned_data.get('cluster', '')
+            network = form.cleaned_data.get('network', '')
+            nfs_home = form.cleaned_data.get('nfs_home', '')
+            additional_disks = form.cleaned_data.get('add_disks', '')
+            additional_disk_size = form.cleaned_data.get('additional_disk_size', '')
+            mount_path = form.cleaned_data.get('mount_path', '')
+            join_centrify = form.cleaned_data.get('join_centrify', '')
+            centrify_zone = form.cleaned_data.get('centrify_zone', '')
+            centrify_role = form.cleaned_data.get('centrify_role', '')
+            install_patches = form.cleaned_data.get('install_patches', '')
