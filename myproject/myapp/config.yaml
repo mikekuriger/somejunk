@@ -94,7 +94,7 @@ datacenters:
 server_types:
     lnp: 'Production'
     lnd: 'Development'
-    lnw: 'Testing'
+    lnt: 'Testing'
     lnq: 'QA'
 
 oss:
