@@ -7,7 +7,8 @@ parser = argparse.ArgumentParser(description="Process args")
 # Add arguments
 parser.add_argument("--dc", required=True, help="st1, ev3")
 parser.add_argument("--network", required=True, help="VLAN540")
-parser.add_argument("--hostname", required=True, help="example.corp.pvt")
+parser.add_argument("--hostname", required=True, help="st1lntsvr1")
+parser.add_argument("--domain", required=False, help="corp.pvt")  # for possible future use in case we want yellowpages.com or something else
 parser.add_argument("--mac", required=True, help="mac address")
 
 # Parse arguments
@@ -20,7 +21,8 @@ def load_config(filepath):
 
 # Generate dc_to_dc from config
 def generate_dc_to_dc(config):
-    return {dc_key: dc_data['name'] for dc_key, dc_data in config['datacenters'].items()}
+    return {dc_key: dc_data['name'] for dc_key, dc_data in config['eip']['datacenters'].items()}
+
 
 def get_space(name):
     parameters = {
@@ -126,18 +128,19 @@ def add_ip_address(ip, name, space_id, mac_addr):
 config = load_config('config.yaml')
 args_dc = args.dc
 
-if args_dc not in config['datacenters']:
-    print(f"Unknown datacenter: {args_dc}")
-    sys.exit(1)
+master = config['eip']['master']
+username = config['eip']['credentials']['username']
+password = config['eip']['credentials']['password']
+datacenter = config['eip']['datacenters'].get(args_dc)
 
-# Extract details from the config
-datacenter = config['datacenters'][args_dc]
-vcenter = datacenter['vcenter']
-username = datacenter['credentials']['username']
-password = datacenter['credentials']['password']
-vlans = datacenter['vlans']
+if datacenter:
+    datacenter_name = datacenter['name']
+    networks = datacenter['networks']
 
-SDS_CON = SOLIDserverRest(vcenter)
+else:
+    print(f"Datacenter '{args_dc}' not found in the config.")
+
+SDS_CON = SOLIDserverRest(master)
 SDS_CON.set_ssl_verify(False)
 SDS_CON.use_basicauth_sds(user=username, password=password)
 
@@ -145,7 +148,7 @@ SDS_CON.use_basicauth_sds(user=username, password=password)
 space = get_space("thryv-eip-ipam")
 
 # Dynamic VLAN to subnet mapping
-network_to_subnet = vlans
+network_to_subnet = networks
 dc_to_dc = generate_dc_to_dc(config)
 
 dc = dc_to_dc.get(args.dc, "Unknown DC")
@@ -161,8 +164,16 @@ free_address = get_next_free_address(subnet['id'], 5, ipstart)
 
 # add ip to IPAM
 hostname = args.hostname
+domain = args.domain
+
+# Check if the hostname already contains a dot (indicating it's an FQDN)
+if '.' in hostname:
+    fqdn = hostname
+else:
+    fqdn = hostname + "." + domain
+    
 mac_addr = args.mac
-node = add_ip_address(free_address['address'][2],hostname,space['id'],mac_addr)
+node = add_ip_address(free_address['address'][2],fqdn,space['id'],mac_addr)
 #print(node)
 print(free_address['address'][2])
 

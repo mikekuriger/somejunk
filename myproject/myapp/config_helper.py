@@ -7,18 +7,18 @@ def load_config():
         config = yaml.safe_load(file)
     return config
 
+
 def get_config_for_datacenter(datacenter):
     config = load_config()  # Load the config file once
 
-    # Retrieve datacenter-specific data
-    datacenter_data = config.get('datacenters', {}).get(datacenter, {})
-    
+    # Retrieve datacenter-specific data under 'vcenter'
+    datacenter_data = config.get('vcenter', {}).get('datacenters', {}).get(datacenter, {})
+
     # Retrieve Centrify zones
     centrify_zones = config.get('centrify_zones')
 
     return {
-        'clusters': datacenter_data.get('clusters', {}).items(),
-        'vlans': datacenter_data.get('vlans', {}).items(),
+   #     'clusters': datacenter_data.get('clusters', []),
+    #    'vlans': datacenter_data.get('vlans', {}).items(),
         'centrify_zones': centrify_zones
     }
-

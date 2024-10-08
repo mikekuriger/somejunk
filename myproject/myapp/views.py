@@ -8,17 +8,60 @@ from django.conf import settings
 
 # 9-16-24 Mike Kuriger
 
+# import subprocess
+
+# def check_vm_exists(vm_name, datacenter):
+#     # Set the appropriate GOVC environment variables based on the datacenter
+#     datacenter = request.POST.get('datacenter', None)  # Get selected datacenter from POST data
+#     if datacenter == 'st1':
+#         _os.environ['GOVC_URL'] = 'https://st1vccomp01a.corp.pvt'
+#     elif datacenter == 'ev3':
+#         _os.environ['GOVC_URL'] = 'https://ev3vccomp01a.corp.pvt'
+    
+#     _os.environ['GOVC_USERNAME'] = 'your_username'  # Set the username
+#     _os.environ['GOVC_PASSWORD'] = 'your_password'  # Set the password
+    
+#     # Build the govc command
+#     govc_args = ['govc', 'vm.info', vm_name]
+    
+#     try:
+#         # Run the govc command to get VM info
+#         result = subprocess.run(govc_args, capture_output=True, text=True)
+        
+#         # If the command returns output, VM exists
+#         if result.returncode == 0:
+#             return True
+#         else:
+#             # Retry with the fully qualified domain name
+#             govc_args[2] = f'{vm_name}.corp.pvt'
+#             result = subprocess.run(govc_args, capture_output=True, text=True)
+#             return result.returncode == 0
+#     except Exception as e:
+#         return False  # Consider VM does not exist in case of any error
+
+    
 def create_vm(request):
     if request.method == 'POST':
-        datacenter = request.POST.get('datacenter', None)
+        datacenter = request.POST.get('datacenter', None)  # Get selected datacenter from POST data
+        #choices = config_data['clusters']full_hostnames = request.POST.getlist('full_hostnames')  # Assuming full_hostnames is a list of hostnames
+        
+        # # Iterate through hostnames and check if each VM exists
+        # for vm_name in full_hostnames:
+        #     if check_vm_exists(vm_name, datacenter):
+        #         # If any VM exists, return an error message and stop the process
+        #         return render(request, 'create_vm.html', {
+        #             'error_message': f"VM '{vm_name}' already exists. Please choose a different name."
+        #         })
+        
+        # If no VMs exist, proceed with VM creation
         form = VMCreationForm(request.POST, datacenter=datacenter)  # Pass datacenter to the form
         if form.is_valid():
             # Process the form data
             data = form.cleaned_data
             
             full_hostnames = data['full_hostnames']
-            #hostname = full_hostnames.split(',')[0].strip()
-            hostname = data['hostname']
+            hostname = full_hostnames.split(',')[0].strip()
+            #hostname = data['hostname']
     
             ticket = data['ticket']
             appname = data['appname']
@@ -121,8 +164,7 @@ def create_vm(request):
             from django.contrib import messages
             messages.success(request, mark_safe(f'VM creation request submitted:<br>{vm_details_str}'))
             
-#           save form on the filesystem for now, i will act on it from there (queue)
-#           filename is (appname fixed)-(count)-(owner)-(date)
+# save form on the filesystem for now, i will act on it from there (queue)
             deployment_name = f"{hostname}-{deployment_count}-{owner}-{deployment_date}"
             file_path = _os.path.join(settings.MEDIA_ROOT, deployment_name)
             # Write the form data to a text file
@@ -176,3 +218,5 @@ def check_dns(request):
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+    

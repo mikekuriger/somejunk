@@ -10,6 +10,9 @@ get_ds() {
     govc datastore.cluster.info|grep Name|grep $CL |awk '{print $2}'
 }
 
+check_vcenter_for_vm() {
+    (govc vm.info  st1lntmk7193 || govc vm.info  st1lntmk7193.corp.pvt) || echo not exist
+}
 CL=$1
 VM=$2
 OS=$3
@@ -81,7 +84,7 @@ echo " - $MAC"
 
 # add vm to DNS
 echo "Adding VM to DNS"
-IP=$(python ./add_vm_to_dns.py --dc $DC --network $VLAN --hostname ${VM}.corp.pvt --mac $MAC 2> /dev/null)
+IP=$(python ./add_vm_to_dns.py --dc $DC --network $VLAN --hostname ${VM} --domain "corp.pvt" --mac $MAC 2> /dev/null)
 
 # make sure VM is off and customize hotname and IP
 echo "Customizing hostname, and IP"

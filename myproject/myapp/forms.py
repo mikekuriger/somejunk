@@ -7,14 +7,21 @@ from .config_helper import load_config, get_config_for_datacenter
 # 9-16-24 Mike Kuriger
 
 # functions to read details from config file
+
 def load_dc():
     config = load_config()
-    dc = config.get('datacenters', {})
-    return [(dc, dc) for dc in dc.keys()]
+    datacenters = config.get('datacenters', {})
+    return [(dc, dc) for dc in datacenters.keys()]
+
+# this will pull the names of the DC for eip use
+# def load_dc():
+#     config = load_config()
+#     containers = config.get('datacenters', {})
+#     return [(dc_key, dc_data.get('name', dc_key)) for dc_key, dc_data in containers.items()]
 
 def load_oss():
     config = load_config()
-    os = config.get('os', {})
+    os = config.get('oss', {})
     return [(key, value) for key, value in os.items()]
 
 def load_servertypes():
@@ -121,11 +128,6 @@ class VMCreationForm(forms.Form):
     os = forms.ChoiceField(
         label="Operating System",
         choices=load_oss(),
-#        choices=[
-#            ('SSVM-OEL7', 'Oracle Enterprise Linux 7'),
-#            ('SSVM-OEL8', 'Oracle Enterprise Linux 8'),
-#            ('SSVM-OEL9', 'Oracle Enterprise Linux 9')
-#        ],
         initial='SSVM-OEL8',
         required=True,
         widget=forms.Select(attrs={'id': 'os', 'class': 'form-control'})
@@ -135,21 +137,21 @@ class VMCreationForm(forms.Form):
         label="Hard Disk Size (GB)",
         choices=[(str(i), str(i)) for i in [60, 100, 150, 200, 250, 512, 1024]],
         initial='60',
-        required=True,
+       # required=True,
         widget=forms.Select(attrs={'id': 'disk_size', 'class': 'form-control'})
     )
 
     cluster = forms.ChoiceField(
         label="Cluster",
         choices=[],
-        required=True,
+        required=False,
         widget=forms.Select(attrs={'id': 'cluster', 'class': 'form-control'})
     )
 
     network = forms.ChoiceField(
         label="Network",
         choices=[],
-        required=True,
+        required=False,
         widget=forms.Select(attrs={'id': 'network', 'class': 'form-control'})
     )
 
@@ -185,7 +187,6 @@ class VMCreationForm(forms.Form):
 
     centrify_zone = forms.ChoiceField(
         label="Centrify Zone",
-        #choices=load_centrify_zones(),
         choices=[('', '--- Select Zone ---')] + load_centrify_zones(),
         required=False,
         widget=forms.Select(attrs={'id': 'centrify_zone', 'class': 'form-control'})
@@ -217,13 +218,13 @@ class VMCreationForm(forms.Form):
         # Pop the datacenter value from kwargs
         datacenter = kwargs.pop('datacenter', None)
         super().__init__(*args, **kwargs)  # Call parent's __init__
-        
+
         if datacenter:
             config_data = get_config_for_datacenter(datacenter)
 
             if config_data:
-                self.fields['cluster'].choices = config_data['clusters']
-                self.fields['network'].choices = config_data['vlans']
+                #self.fields['cluster'].choices = config_data['clusters']
+                #self.fields['network'].choices = config_data['vlans']
 
                 # Check if centrify_zones exists and is not None
                 centrify_zones = config_data.get('centrify_zones')
